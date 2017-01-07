@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>Ejemplo AngularJS</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
+		<script src="app.js"></script>
+		<script src="main.ctrl.js"></script>
+	</head>
+
+	<!--SE USA ng-app PARA ASOCIAR A NUESTRO MODULO EN app.js Y ESPECIFICANDO EL CONTROLADOR QUE USAREMOS EN main.ctrl.js-->
+	<body ng-app="app" ng-controller="MainController as main">
+
+		<div class="container">
+			</br>
+			<img src="https://gdgcaracas.com.ve/upload/logo-dark.png"/>
+			<h1>{{main.title}}</h1></br>
+			
+			<!--SE ASOCIA EL CONTROL DE BUSQUEDA CON UN MODELO MEDIANDO ng-model-->
+			<div class="input-group">
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-search"></span>
+				</span>
+				<input type="text" class="form-control" ng-model="main.searchInput">
+			</div>
+			
+			<!--SE USA DIRECTVA ng-repeat PARA ITERAR SOBRE LA LISTA DE PELICULAS, Y SE FILTRA SEGUN LA BUSQUEDA Y SEGUN EL ORDEN-->
+			<h3>Lista de películas</h3>    
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="show in main.shows | filter:main.searchInput | orderBy:main.order.key:main.order.reverse">
+				<span class="glyphicon glyphicon-star" ng-if="show.favorite"></span> {{show.title}} <span class="badge">{{show.year}}</span></li>
+			</ul>
+			
+			<!--SE USA CARGA UN SELECT SEGUN LOS DATOS DEL CONTROLADOR CON ng-options Y SE ASOCIA A UN MODELO CON ng-model-->
+			<h3>Ordenar</h3>
+			<select class="form-control pull-right" ng-model="main.order" ng-options="order as order.title for order in main.orders"></select>
+			
+			
+			</br></br>
+			<!--SE ESTABLECE UNA ACCION AL FORMULARIO MEDIANTE ng-submit Y CADA DATO ESTA ASOCIADO A UN MODELO DEL CONTROLADOR CON ng-model-->
+			<h3>Agregar una nueva película</h3>
+			<form name="main.addForm" class="form" ng-submit="main.addShow()">
+				<div class="form-group">
+					<label>Título</label>
+					<input type="text" class="form-control" ng-model="main.new.title" required />
+				</div>
+				<div class="form-group">
+					<label>Año</label>
+					<input type="number" min="1900" max="2030" class="form-control" ng-model="main.new.year" required />
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<label>Favorita? <input type="checkbox" ng-model="main.new.favorite" /></label>
+					</div>
+					<div class="col-xs-6">
+						<button class="btn btn-success pull-right"><span class="glyphicon glyphicon-plus-sign"></span> Agregar</button>
+					</div>
+				</div>
+
+			</form>
+		</div>
+	</body>
+	
+</html>
